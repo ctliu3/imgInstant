@@ -2,16 +2,16 @@ import numpy as np
 
 np.seterr(divide = 'ignore', invalid = 'ignore')
 
-def dist_mat(X, Y):
+def distance_matrix(X, Y):
   """ Compute the distance between matrices X and Y
 
   Parmaters
   ---------
   X: matrix
-           An matrix with shape (n, d)
+     A feature matrix with shape (n, d)
 
   Y: matrix
-           An matrix with shape (m, d)
+     An feature matrix with shape (m, d)
 
   Returns
   -------
