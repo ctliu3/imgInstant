@@ -4,6 +4,7 @@ import random
 import numpy as np
 from metrics import *
 from pca import *
+from compactbit import *
 
 def load_data(db, f_feats, f_train, f_test):
   feats = [] # #features x #dimension
@@ -34,7 +35,7 @@ if __name__ == '__main__':
   f_feats = 'feats'
   f_train = 'train'
   f_test = 'test'
-  nbits = 64
+  nbits = 128
   ntest = 1000 #testing scale
   method = 'pca' # ['pca', 'lsh', 'itq']
   aver_neighbors = 50
@@ -79,9 +80,15 @@ if __name__ == '__main__':
   #
   if method == 'pca':
     (eigvec, _) = pca(x_train, nbits)
-    x_train = np.dot(x_train, eigvec)
+    Y = np.dot(XX, eigvec)
     #Y = np.zeros(x_train.shape)
-    Y = x_train >= 0
-    compactbit(Y)
+    Y = Y >= 0
+    Y = compactbit(Y)
+    print Y.shape
   elif method == 'lsh':
     pass
+
+  # Each row in Y is a binary code
+  B1 = Y[0:n_train][:]
+  B2 = Y[n_train:][:]
+  D = hamming_distance(B2, B1)

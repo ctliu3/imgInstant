@@ -30,7 +30,21 @@ def distance_matrix(X, Y):
   D = np.sqrt(X1 + np.transpose(X2) - 2 * R)
   return D
 
-def manhttan(XX, n_train, nbits, q):
+def manhttan_distance(XX, n_train, nbits, q):
   """
   """
   pass
+
+def hamming_distance(X1, X2):
+  """
+  """
+  n1, d = X1.shape
+  n2, _ = X2.shape
+
+  Dh = np.zeros([n1, n2])
+  print Dh.shape
+  return Dh
+
+a = np.array([[23, 1, 9], [233, 9, 10]])
+b = np.array([[3, 10, 7], [233, 9, 10]])
+hamming_distance(a, b)
