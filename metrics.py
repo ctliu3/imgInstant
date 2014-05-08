@@ -1,4 +1,6 @@
+from __future__ import division
 import numpy as np
+import math
 
 np.seterr(divide = 'ignore', invalid = 'ignore')
 
@@ -35,16 +37,53 @@ def manhttan_distance(XX, n_train, nbits, q):
   """
   pass
 
-def hamming_distance(X1, X2):
-  """
+def hamming_distance(X1, X2, per = 8):
+  """ Compute the hamming distance between matrices X1 and X2
+
+  Parmaters
+  ---------
+  X1, X2: matrix
+          Feature matrices with shape (n1, d) and (n2, d) resp
+  per   :
+
+  Returns
+  -------
+  Dh: similarity matrix based on hamming distance
+      An matrix with shape (n1, n2)
   """
   n1, d = X1.shape
   n2, _ = X2.shape
+  temp = X2[:][1]
+  print temp
+  exit(0)
 
   Dh = np.zeros([n1, n2])
-  print Dh.shape
+  nwords = int(math.ceil(d / per))
+  print "Dh.shape = ", Dh.shape
+  for i in xrange(n1):
+    for j in xrange(nwords):
+      res = X1[i][j] ^ X2[:, j]
+      print "@", X1[i][j].shape, X2[:][j].shape
+      #print res.shape
+      Dh[i][:] = Dh[i][:] + res
+      #print "res: ", res
+    #for j in xrange(n2):
+      #for k in xrange(nwords):
+        #for b in xrange(per):
+          #if (X1[i][k] & (1 << b)) ^ (X2[j][k] & (1 << b)) != 0:
+            #Dh[i][j] = Dh[i][j] + 1
+  #for i in xrange(n1):
+    #for j in xrange(n2):
+      #for k in xrange(nwords):
+        #for b in xrange(per):
+          #if (X1[i][k] & (1 << b)) ^ (X2[j][k] & (1 << b)) != 0:
+            #Dh[i][j] = Dh[i][j] + 1
   return Dh
 
-a = np.array([[23, 1, 9], [233, 9, 10]])
-b = np.array([[3, 10, 7], [233, 9, 10]])
-hamming_distance(a, b)
+a = np.array([[4]])
+b = np.array([[3, 3], [4, 5]])
+print b.reshape(2, 2)
+#print (b[0:2])[0]
+print b[:][0]
+#print np.bitwise_xor(a, b)
+#print hamming_distance(a, b)

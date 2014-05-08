@@ -5,6 +5,7 @@ import numpy as np
 from metrics import *
 from pca import *
 from compactbit import *
+from precision_recall import *
 
 def load_data(db, f_feats, f_train, f_test):
   feats = [] # #features x #dimension
@@ -81,10 +82,9 @@ if __name__ == '__main__':
   if method == 'pca':
     (eigvec, _) = pca(x_train, nbits)
     Y = np.dot(XX, eigvec)
-    #Y = np.zeros(x_train.shape)
     Y = Y >= 0
     Y = compactbit(Y)
-    print Y.shape
+    print "Y.shape = ", Y.shape
   elif method == 'lsh':
     pass
 
@@ -92,3 +92,8 @@ if __name__ == '__main__':
   B1 = Y[0:n_train][:]
   B2 = Y[n_train:][:]
   D = hamming_distance(B2, B1)
+
+  # use D and w_true_test_train to get the precision and recall
+  precision, recall = precision_recall(Wtrue, D)
+  print precision
+  print recall
