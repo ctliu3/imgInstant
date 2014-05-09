@@ -94,6 +94,6 @@ if __name__ == '__main__':
   D = hamming_distance(B2, B1)
 
   # use D and w_true_test_train to get the precision and recall
-  precision, recall = precision_recall(Wtrue, D)
-  print precision
-  print recall
+  #precision, recall = precision_recall(Wtrue, D)
+  #print precision
+  #print recall

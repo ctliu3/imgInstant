@@ -51,21 +51,34 @@ def hamming_distance(X1, X2, per = 8):
   Dh: similarity matrix based on hamming distance
       An matrix with shape (n1, n2)
   """
+  bit_in_char = [
+      0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1, 2, 2, 3, 2, 3,
+      3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4,
+      3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 1, 2,
+      2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5,
+      3, 4, 4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5,
+      5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 1, 2, 2, 3,
+      2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4,
+      4, 5, 4, 5, 5, 6, 2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
+      3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 2, 3, 3, 4, 3, 4,
+      4, 5, 3, 4, 4, 5, 4, 5, 5, 6, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6,
+      5, 6, 6, 7, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 4, 5,
+      5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8]
+
   n1, d = X1.shape
   n2, _ = X2.shape
-  temp = X2[:][1]
-  print temp
-  exit(0)
 
   Dh = np.zeros([n1, n2])
   nwords = int(math.ceil(d / per))
-  print "Dh.shape = ", Dh.shape
+
   for i in xrange(n1):
     for j in xrange(nwords):
       res = X1[i][j] ^ X2[:, j]
-      print "@", X1[i][j].shape, X2[:][j].shape
-      #print res.shape
-      Dh[i][:] = Dh[i][:] + res
+      for val in res:
+        #print val
+        assert val >=0 and val <= 255
+        res[i] = bit_in_char[val]
+      Dh[i, :] = Dh[i, :] + res
       #print "res: ", res
     #for j in xrange(n2):
       #for k in xrange(nwords):
@@ -82,8 +95,12 @@ def hamming_distance(X1, X2, per = 8):
 
 a = np.array([[4]])
 b = np.array([[3, 3], [4, 5]])
-print b.reshape(2, 2)
+c = np.array([1, 2, 3, 5, 3])
+#print c[np.ix_([1, 2, 3, 4, 5])]
+#print b.reshape(2, 2)
 #print (b[0:2])[0]
-print b[:][0]
+#print a
+#print b[:, 0]
+#print np.bitwise_xor(a, b[:, 0])
 #print np.bitwise_xor(a, b)
 #print hamming_distance(a, b)
