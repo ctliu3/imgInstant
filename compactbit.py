@@ -3,7 +3,20 @@ import numpy as np
 import math
 
 def compactbit(b, per = 8):
-  """
+  """ Convert the binary code to the compact form
+
+  Parameters
+  ----------
+  b: matrix
+     Each row is the feature, whose form is binary code, with shape (n, nbits)
+     nbits is the parameter we set in the beginning of the code, the number is
+     64, 128, ...
+
+  Return
+  ------
+  cb: matrix
+      The row is the same with paramter b, however, the column size is smaller,
+      which is int(ceil(nbits / per))
   """
   n, nbits = b.shape
   # allocate 8 bits to store per-dimensional hash value
@@ -27,7 +40,7 @@ def _compactbit(b):
   return np.array(cb)
 
 #a = np.array([[True, True, True, True, True, True, True, True, True]])
-a = np.array([[True, False, True]])
+#a = np.array([[True, False, True]])
 #compactbit(a)
-print compactbit(a, 8)
-print compactbit(a)
+#print compactbit(a, 8)
+#print compactbit(a)

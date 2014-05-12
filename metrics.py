@@ -37,14 +37,15 @@ def manhttan_distance(XX, n_train, nbits, q):
   """
   pass
 
-def hamming_distance(X1, X2, per = 8):
+def hamming_distance(X1, X2):
   """ Compute the hamming distance between matrices X1 and X2
+      This function can only solve the situation when per = 8, that is, each
+      column of X1 or X2 has the maximum value 255
 
   Parmaters
   ---------
   X1, X2: matrix
           Feature matrices with shape (n1, d) and (n2, d) resp
-  per   :
 
   Returns
   -------
@@ -65,42 +66,18 @@ def hamming_distance(X1, X2, per = 8):
       5, 6, 6, 7, 3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7, 4, 5,
       5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8]
 
-  n1, d = X1.shape
+  n1, nwords = X1.shape
   n2, _ = X2.shape
 
   Dh = np.zeros([n1, n2])
-  nwords = int(math.ceil(d / per))
 
   for i in xrange(n1):
     for j in xrange(nwords):
       res = X1[i][j] ^ X2[:, j]
-      for val in res:
-        #print val
-        assert val >=0 and val <= 255
-        res[i] = bit_in_char[val]
+      assert res.shape[0] == n2
+      for k in xrange(n2):
+        assert res[k] >=0 and res[k] <= 255
+        res[k] = bit_in_char[res[k]]
       Dh[i, :] = Dh[i, :] + res
-      #print "res: ", res
-    #for j in xrange(n2):
-      #for k in xrange(nwords):
-        #for b in xrange(per):
-          #if (X1[i][k] & (1 << b)) ^ (X2[j][k] & (1 << b)) != 0:
-            #Dh[i][j] = Dh[i][j] + 1
-  #for i in xrange(n1):
-    #for j in xrange(n2):
-      #for k in xrange(nwords):
-        #for b in xrange(per):
-          #if (X1[i][k] & (1 << b)) ^ (X2[j][k] & (1 << b)) != 0:
-            #Dh[i][j] = Dh[i][j] + 1
-  return Dh
 
-a = np.array([[4]])
-b = np.array([[3, 3], [4, 5]])
-c = np.array([1, 2, 3, 5, 3])
-#print c[np.ix_([1, 2, 3, 4, 5])]
-#print b.reshape(2, 2)
-#print (b[0:2])[0]
-#print a
-#print b[:, 0]
-#print np.bitwise_xor(a, b[:, 0])
-#print np.bitwise_xor(a, b)
-#print hamming_distance(a, b)
+  return Dh

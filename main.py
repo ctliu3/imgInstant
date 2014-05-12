@@ -36,7 +36,7 @@ if __name__ == '__main__':
   f_feats = 'feats'
   f_train = 'train'
   f_test = 'test'
-  nbits = 128
+  nbits = 64
   ntest = 1000 #testing scale
   method = 'pca' # ['pca', 'lsh', 'itq']
   aver_neighbors = 50
@@ -82,6 +82,7 @@ if __name__ == '__main__':
   if method == 'pca':
     (eigvec, _) = pca(x_train, nbits)
     Y = np.dot(XX, eigvec)
+    # Y has the size #test x #eigvalue
     Y = Y >= 0
     Y = compactbit(Y)
     print "Y.shape = ", Y.shape
@@ -94,6 +95,7 @@ if __name__ == '__main__':
   D = hamming_distance(B2, B1)
 
   # use D and w_true_test_train to get the precision and recall
-  #precision, recall = precision_recall(Wtrue, D)
+  precision, recall, rate = precision_recall(w_true_test_train, D)
+
   #print precision
   #print recall
