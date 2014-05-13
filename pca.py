@@ -11,8 +11,8 @@ def pca(X, k):
       eigenvalues and eigenvectors will be returned.
 
   Args:
-    X: matrix (n x d). A feature matrix
-    k: integer. The number of principal components need to be returned 
+    X: Feature matrix (n x d). 
+    k: Single integer. The number of principal components need to be returned 
   Returns:
     eigvec: k eigenvectors. An matrix with shape (d, k)
     eigval: k eigenvalues. An matrix with shape (1, k)

@@ -1,49 +1,31 @@
-#from PIL import Image
-#import leargist
 import random
 import numpy as np
+import pylab as pl
+
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import auc
+
+from load_data import *
 from metrics import *
 from pca import *
 from compactbit import *
 from precision_recall import *
 
-def load_data(db, f_feats, f_train, f_test):
-  feats = [] # #features x #dimension
-  train = [] # index of training image
-  test = []  # index of testing iamge
-
-  # load features
-  with open(db + f_feats) as f:
-    for line in f:
-      feats.append(map(float, line.strip().split()))
-  # log
-
-  # load training set
-  with open(db + f_train) as f:
-    for line in f:
-      train.append(int(float(line.strip())))
-  # log
-
-  # load testing set
-  with open(db + f_test) as f:
-    for line in f:
-      test.append(int(float(line.strip())))
-  # log
-  return feats, train, test
-
 if __name__ == '__main__':
-  db = 'data/tinyImage/'
-  f_feats = 'feats'
-  f_train = 'train'
-  f_test = 'test'
-  nbits = 64
-  ntest = 1000 #testing scale
-  method = 'pca' # ['pca', 'lsh', 'itq']
+  db             = 'data/tinyImage/'
+  f_feats        = 'feats'
+  f_train        = 'train'
+  f_test         = 'test'
+  nbits          = 64
+  ntest          = 1000  # testing scale
+  method         = 'pca' # ['pca', 'lsh', 'itq']
   aver_neighbors = 50
+
   [feats, train, test] = load_data(db, f_feats, f_train, f_test);
+  exit(0)
 
   rdm = random.sample(range(len(feats)), len(feats))
-  # get test data
+  # Get test data
   test_idx = rdm[0:ntest]
   x_test = []
   for idx in test_idx:
@@ -56,7 +38,7 @@ if __name__ == '__main__':
     x_train.append(feats[idx - 1][:])
   n_train = len(x_train)
 
-  # define ground-truth neighbors
+  # Define ground-truth neighbors
   d_true_train = distance_matrix(x_train[1:101][:], x_train)
   d_ball = np.sort(d_true_train, axis = 1)
   (r, _) = d_ball.shape
@@ -65,14 +47,15 @@ if __name__ == '__main__':
     avers.append(d_ball[i][aver_neighbors])
   d_ball = np.mean(avers)
 
-  # scale data
+  # Scale data
   x_train = x_train / d_ball
   x_test = x_test / d_ball
   d_ball = 1
   d_true_test_train = distance_matrix(x_test, x_train)
+  # This is the ground true matrix (#test x #train)
   w_true_test_train = d_true_test_train < d_ball
 
-  # generate training and test split and the data matrix
+  # Generate training and test split and the data matrix
   XX = np.append(x_train, x_test, axis = 0)
   (r, c) = XX.shape
   means = np.mean(XX, axis = 0).reshape(1, c)
@@ -82,7 +65,7 @@ if __name__ == '__main__':
   if method == 'pca':
     (eigvec, _) = pca(x_train, nbits)
     Y = np.dot(XX, eigvec)
-    # Y has the size #test x #eigvalue
+    # Y has the size (#test x #eigvalue)
     Y = Y >= 0
     Y = compactbit(Y)
     print "Y.shape = ", Y.shape
@@ -94,8 +77,15 @@ if __name__ == '__main__':
   B2 = Y[n_train:][:]
   D = hamming_distance(B2, B1)
 
-  # use D and w_true_test_train to get the precision and recall
-  precision, recall, rate = precision_recall(w_true_test_train, D)
+  # Use D and w_true_test_train to get the precision and recall
+  precision, recall = precision_recall(w_true_test_train, D)
 
-  #print precision
-  #print recall
+  pl.clf()
+  pl.plot(recall, precision, label = 'Precision-Recall curve')
+  pl.xlabel('Recall')
+  pl.ylabel('Precision')
+  pl.ylim([0.0, 1.05])
+  pl.xlim([0.0, 1.0])
+  pl.title('Precision-Recall')
+  pl.legend(loc="lower left")
+  pl.show()

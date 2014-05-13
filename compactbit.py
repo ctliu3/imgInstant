@@ -5,18 +5,13 @@ import math
 def compactbit(b, per = 8):
   """ Convert the binary code to the compact form
 
-  Parameters
-  ----------
-  b: matrix
-     Each row is the feature, whose form is binary code, with shape (n, nbits)
-     nbits is the parameter we set in the beginning of the code, the number is
-     64, 128, ...
-
-  Return
-  ------
-  cb: matrix
-      The row is the same with paramter b, however, the column size is smaller,
-      which is int(ceil(nbits / per))
+  Args:
+    b: Matrix. Each row is the feature, whose form is binary code, with shape 
+      (n, nbits) nbits is the parameter we set in the beginning of the code,
+      the number is 64, 128, ...
+  Returns
+    cb: Matrix The row is the same with paramter b, however, the column size is
+        smaller, which is int(ceil(nbits / per))
   """
   n, nbits = b.shape
   # allocate 8 bits to store per-dimensional hash value
@@ -31,6 +26,9 @@ def compactbit(b, per = 8):
   return np.array(cb)
 
 def _compactbit(b):
+  """ Converting the binary array to the big integer.
+      NOT used currently.
+  """
   n, nbits = b.shape
   cb = [0 for _ in xrange(n)]
   for i in xrange(n):
@@ -38,9 +36,3 @@ def _compactbit(b):
       if b[i][nbits - j - 1] == True:
         cb[i] = cb[i] | (1 << j)
   return np.array(cb)
-
-#a = np.array([[True, True, True, True, True, True, True, True, True]])
-#a = np.array([[True, False, True]])
-#compactbit(a)
-#print compactbit(a, 8)
-#print compactbit(a)
