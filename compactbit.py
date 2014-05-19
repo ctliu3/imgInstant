@@ -7,8 +7,8 @@ def compactbit(b, per = 8):
 
   Args:
     b: Matrix. Each row is the feature, whose form is binary code, with shape 
-      (n, nbits) nbits is the parameter we set in the beginning of the code,
-      the number is 64, 128, ...
+       (n, nbits) nbits is the parameter we set in the beginning of the code,
+       the number is 64, 128, ...
   Returns
     cb: Matrix The row is the same with paramter b, however, the column size is
         smaller, which is int(ceil(nbits / per))

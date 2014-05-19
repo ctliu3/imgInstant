@@ -12,16 +12,16 @@ def load_data(db, f_feats, f_train, f_test):
   Returns:
     The database information, including the features, training and testing indexs.
     feats: Matrix, #feature x #dimension
-    train: Array, #index of the training set 
-    test : Array, #index of the testing set 
+    train: Array, #index of the training set
+    test : Array, #index of the testing set
   """
   feats = [] # #features x #dimension
   train = [] # index of training image
-  test  = [] # index of testing iamge
+  test  = [] # index of testing image
 
   # Load features
   try:
-    with open(db + f_feats + 'a') as f:
+    with open(db + f_feats) as f:
       for line in f:
         feats.append(map(float, line.strip().split()))
   except IOError:

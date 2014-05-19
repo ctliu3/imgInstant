@@ -64,8 +64,3 @@ def hamming_distance(X1, X2):
       Dh[i, :] = Dh[i, :] + res
 
   return Dh
-
-def manhttan_distance(XX, n_train, nbits, q):
-  """ Compute the manhttan distance 
-  """
-  pass
