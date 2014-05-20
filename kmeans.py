@@ -13,8 +13,9 @@ class Kmeans(object):
       X: data to cluster, #feature x #dimension
       k: #cluster
     Return:
-      centers: matrix, cluster[i] means the data in the center i, which also a 
+      clusters: matrix, cluster[i] means the data in the center i, which also a 
                matrix
+      centers : type of np.array(), each row contains the data of center
     """
     self.X = X
     self.n, self.d = X.shape # n: #dataset, d: #dimension
@@ -41,8 +42,7 @@ class Kmeans(object):
         for j in xrange(self.ncluster):
           distance = self._distance(self.X[i], centers[j])
           if distance < min_distance:
-            min_distance = distance
-            close_id = j
+            min_distance, close_id = distance, j
         cluster_id[i] = close_id
 
       cluster_count = np.array([0] * self.ncluster)
@@ -63,11 +63,11 @@ class Kmeans(object):
       niter += 1
 
     # End of the body of k-means algorithm, return the data points in each cluster
-    cluster = [[] for _ in xrange(self.ncluster)]
-    [cluster[cluster_id[i]].append(self.X[i]) for i in xrange(self.n)]
+    clusters = [[] for _ in xrange(self.ncluster)]
+    [clusters[cluster_id[i]].append(self.X[i]) for i in xrange(self.n)]
     for i in xrange(self.ncluster):
-      cluster[i] = np.matrix(cluster[i])
-    return cluster
+      clusters[i] = np.matrix(clusters[i])
+    return clusters, centers
 
   def _init_center(self):
     """ Rondomly selecting self.ncluster number from [1...self.n] """
