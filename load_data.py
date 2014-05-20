@@ -25,7 +25,7 @@ def load_data(db, f_feats, f_train, f_test):
       for line in f:
         feats.append(map(float, line.strip().split()))
   except IOError:
-    print('%s file load failed!\n' % (db + f_feats), file = sys.stdout)
+    print('%s file loads failed!\n' % (db + f_feats), file = sys.stdout)
     sys.exit(0)
 
   # Load training set
@@ -34,7 +34,7 @@ def load_data(db, f_feats, f_train, f_test):
       for line in f:
         train.append(int(float(line.strip())))
   except IOError:
-    print('%s file load failed!\n' % (db + f_train), file = sys.stdout)
+    print('%s file loads failed!\n' % (db + f_train), file = sys.stdout)
     sys.exit(0)
 
   # Load testing set
@@ -43,7 +43,7 @@ def load_data(db, f_feats, f_train, f_test):
       for line in f:
         test.append(int(float(line.strip())))
   except IOError:
-    print('%s file load failed!\n' % (db + f_test), file = sys.stdout)
+    print('%s file loads failed!\n' % (db + f_test), file = sys.stdout)
     sys.exit(0)
 
   return feats, train, test

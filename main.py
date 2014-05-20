@@ -30,7 +30,7 @@ if __name__ == '__main__':
   test_idx = rdm[0:ntest]
   # ntest x #(dimension of feature), for GIST descriptor, the second dimension
   # is 512
-  x_test = [] 
+  x_test = []
   for idx in test_idx:
     x_test.append(feats[idx - 1][:])
 
@@ -69,7 +69,7 @@ if __name__ == '__main__':
   means = np.mean(XX, axis = 0).reshape(1, c)
   XX = XX - np.tile(means, (r, 1))
 
-  #
+  # Various hash method
   if method == 'pca':
     Y = pca_hash(x_train, XX, nbits)
   elif method == 'lsh':
