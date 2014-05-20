@@ -21,7 +21,7 @@ if __name__ == '__main__':
   method         = 'pca'   # ['pca', 'lsh', 'itq']
   aver_neighbors = 50      # the number of neighbors to obtain the ground true
   manhattan_hash = False   # whether to use the manhattan hashing
-  manhattan_bit  = 2       # 
+  manhattan_bit  = 2       # map each dimension to `manhattan_bit` bits
 
   [feats, train, test] = load_data(db, f_feats, f_train, f_test);
 

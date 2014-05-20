@@ -1,8 +1,9 @@
 from pca import *
 from compactbit import *
 from manhattan_quant import *
+from math import ceil
 
-def pca_hash(x_train, XX, nbits, manhattan_hash = False):
+def pca_hash(x_train, XX, nbits, manhattan_hash = False, manhattan_bit = 2):
   """
   Compute the hash code with Principal Component Analysis (PCA)
 
@@ -13,11 +14,14 @@ def pca_hash(x_train, XX, nbits, manhattan_hash = False):
   Returns:
     Y: the compact binary code (#data, nbits)
   """
+  (n_train, _) = x_train.shape
   (eigvec, _) = pca(x_train, nbits)
   Y = np.dot(XX, eigvec)
   # Y has the size (#test x #eigvalue)
   if manhattan_hash == True:
-    manhattan_quant()
+    # Change!
+    nbits = int(math.ceil(nbits / manhattan_bit))
+    manhattan_quant(XX, n_train, nbits, manhattan_bit)
   else:
     Y = Y >= 0
     Y = compactbit(Y)

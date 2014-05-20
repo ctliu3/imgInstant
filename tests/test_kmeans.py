@@ -30,13 +30,15 @@ class KmeansTestCase(unittest.TestCase):
 
     X = np.array(X)
     kmeans = Kmeans(X, 2)
-    clusters = kmeans.clustering()
+    clusters, centers = kmeans.clustering()
 
     matplotlib.rcParams['axes.unicode_minus'] = False
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.plot(clusters[0][:, 0], clusters[0][:, 1], 'bo')
     ax.plot(clusters[1][:, 0], clusters[1][:, 1], 'ro')
+    ax.plot(centers[0, 0], centers[0, 1], 'g*', markersize = 20)
+    ax.plot(centers[1, 0], centers[1, 1], 'g*', markersize = 20)
     plt.show()
 
 if __name__ == '__main__':

@@ -1,11 +1,12 @@
 import numpy as np
+import kmeans
 
 def manhattan_quant(XX, n_train, nbits, Q):
   """
   Args:
     XX: data with shape #data x #(dimension of feature)
     n_train: #training set
-    nbits: #binary code
+    nbits: NOT #binary code, #numeric code
     Q: map each dimension to Q bits
   Return:
     Y: the compact numeric code (#data, nbits). NOT binary code.
@@ -17,9 +18,10 @@ def manhattan_quant(XX, n_train, nbits, Q):
   threshold =  np.zeros([nbits, 2**(Q - 1)])
 
   for i in xrange(Q):
-    centers = k_maens(X_train[:, i], 2**Q);
+    _, centers = kmeans(X_train[:, i], 2**Q);
     centers = sorted(centers);
-    threshold[i, :] = 0;
+    print centers
+    #threshold[i, :] = 0;
     pass
 
 def _assign():
