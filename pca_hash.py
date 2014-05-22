@@ -1,3 +1,4 @@
+from __future__ import division
 from pca import *
 from compactbit import *
 from manhattan_quant import *
@@ -15,14 +16,19 @@ def pca_hash(x_train, XX, nbits, manhattan_hash = False, manhattan_bit = 2):
     Y: the compact binary code (#data, nbits)
   """
   (n_train, _) = x_train.shape
+  if manhattan_hash == True:
+    nbits = int(ceil(nbits / manhattan_bit))
+
   (eigvec, _) = pca(x_train, nbits)
+  eigvec = eigvec.real
   Y = np.dot(XX, eigvec)
+  print "Shape (training set) after pca: ", Y.shape
+  #print Y
   # Y has the size (#test x #eigvalue)
   if manhattan_hash == True:
-    # Change!
-    nbits = int(math.ceil(nbits / manhattan_bit))
-    manhattan_quant(XX, n_train, nbits, manhattan_bit)
+    Y = manhattan_quant(Y, n_train, nbits, manhattan_bit)
   else:
     Y = Y >= 0
     Y = compactbit(Y)
+
   return Y

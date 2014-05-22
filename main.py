@@ -20,8 +20,8 @@ if __name__ == '__main__':
   ntest          = 1000    # testing scale
   method         = 'pca'   # ['pca', 'lsh', 'itq']
   aver_neighbors = 50      # the number of neighbors to obtain the ground true
-  manhattan_hash = False   # whether to use the manhattan hashing
-  manhattan_bit  = 2       # map each dimension to `manhattan_bit` bits
+  manhattan_hash = False    # whether to use the manhattan hashing
+  manhattan_bit  = 3       # map each dimension to `manhattan_bit` bits
 
   [feats, train, test] = load_data(db, f_feats, f_train, f_test);
 
@@ -71,14 +71,19 @@ if __name__ == '__main__':
 
   # Various hash method
   if method == 'pca':
-    Y = pca_hash(x_train, XX, nbits)
+    Y = pca_hash(x_train, XX, nbits, manhattan_hash, manhattan_bit)
   elif method == 'lsh':
     pass
 
   # Each row in Y is a binary code
   B1 = Y[0:n_train][:]
   B2 = Y[n_train:][:]
-  D = hamming_distance(B2, B1)
+  print B1.shape
+  print B2.shape
+  if manhattan_hash == True:
+    D = distance_matrix(B2, B1)
+  else:
+    D = hamming_distance(B2, B1)
 
   # Use D and w_true_test_train to get the precision and recall
   precision, recall = precision_recall(w_true_test_train, D)

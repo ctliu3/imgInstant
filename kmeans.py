@@ -1,6 +1,8 @@
 from __future__ import division
 from random import sample
 from math import sqrt
+from time import clock
+from types import *
 import numpy as np
 
 class Kmeans(object):
@@ -18,14 +20,18 @@ class Kmeans(object):
       centers : type of np.array(), each row contains the data of center
     """
     self.X = X
-    self.n, self.d = X.shape # n: #dataset, d: #dimension
+    self.n = X.shape[0] # n: #dataset
+    self.d = X.shape[1] if X.ndim == 2 else 1 # d: #dimension
     self.ncluster = k
-    self.threshold = 1E-3
+    self.threshold = 1e-2
 
     assert self.ncluster > 0 and self.n >= self.ncluster
 
   def clustering(self):
     """ Main process of k-means algorithm """
+    print "K means process ... ",
+    start_time = clock()
+
     centers = np.zeros((self.n, self.d)) # store the centers
     cluster_id = np.array([0] * self.n)  # record the ID of each center
     niter = 0   # #iteration
@@ -33,7 +39,10 @@ class Kmeans(object):
 
     center_id = self._init_center()
     for i in xrange(self.ncluster):
-      centers[i, :] = self.X[center_id[i], :]
+      if self.X.ndim == 2:
+        centers[i, :] = self.X[center_id[i], :]
+      else:
+        centers[i][0] = self.X[center_id[i]]
 
     while diff > self.threshold:
       # Find the nearest center for each data point
@@ -67,6 +76,8 @@ class Kmeans(object):
     [clusters[cluster_id[i]].append(self.X[i]) for i in xrange(self.n)]
     for i in xrange(self.ncluster):
       clusters[i] = np.matrix(clusters[i])
+
+    print "%d second(s)" % (clock() - start_time)
     return clusters, centers
 
   def _init_center(self):
