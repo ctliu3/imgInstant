@@ -6,9 +6,9 @@ def load_data(db, f_feats, f_train, f_test):
 
   Args:
     db: The base path of the database
-    f_feats: The file containing the features 
-    f_train: The file containing the training set 
-    f_test : The file containing the testing set 
+    f_feats: The file containing the features
+    f_train: The file containing the training set
+    f_test : The file containing the testing set
   Returns:
     The database information, including the features, training and testing indexs.
     feats: Matrix, #feature x #dimension

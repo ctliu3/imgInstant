@@ -7,6 +7,7 @@ from sklearn.metrics import auc
 
 from load_data import *
 from pca_hash import *
+from lsh_hash import *
 from metrics import *
 from precision_recall import *
 
@@ -15,13 +16,13 @@ if __name__ == '__main__':
   f_feats        = 'feats' # the feature file
   f_train        = 'train' # the training set file
   f_test         = 'test'  # the testing set file
-  nbits          = 64      # the number of bit used to present the binary code
-                           # the value is better choosing in {64, 128, 256}
+  nbits          = 256      # the number of bit used to present the binary code
+                           # the value is better choosing in {32, 64, 128, 256}
   ntest          = 1000    # testing scale
-  method         = 'pca'   # ['pca', 'lsh', 'itq']
+  method         = 'lsh'   # ['pca', 'lsh', 'itq']
   aver_neighbors = 50      # the number of neighbors to obtain the ground true
-  manhattan_hash = False    # whether to use the manhattan hashing
-  manhattan_bit  = 3       # map each dimension to `manhattan_bit` bits
+  manhattan_hash = True   # whether to use the manhattan hashing
+  manhattan_bit  = 2       # map each dimension to `manhattan_bit` bits
 
   [feats, train, test] = load_data(db, f_feats, f_train, f_test);
 
@@ -73,13 +74,11 @@ if __name__ == '__main__':
   if method == 'pca':
     Y = pca_hash(x_train, XX, nbits, manhattan_hash, manhattan_bit)
   elif method == 'lsh':
-    pass
+    Y = lsh_hash(x_train, XX, nbits, manhattan_hash, manhattan_bit)
 
   # Each row in Y is a binary code
   B1 = Y[0:n_train][:]
   B2 = Y[n_train:][:]
-  print B1.shape
-  print B2.shape
   if manhattan_hash == True:
     D = distance_matrix(B2, B1)
   else:
@@ -92,8 +91,8 @@ if __name__ == '__main__':
   pl.plot(recall, precision, label = 'Precision-Recall curve')
   pl.xlabel('Recall')
   pl.ylabel('Precision')
-  pl.ylim([0.0, 1.05])
+  pl.ylim([0.0, 1.0])
   pl.xlim([0.0, 1.0])
   pl.title('Precision-Recall')
-  pl.legend(loc="lower left")
+  pl.legend(loc = "lower left")
   pl.show()

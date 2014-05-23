@@ -10,7 +10,7 @@ class Kmeans(object):
 
   def __init__(self, X, k):
     """ Initialization
-    
+
     Args:
       X: data to cluster, #feature x #dimension
       k: #cluster
