@@ -1,5 +1,6 @@
 from __future__ import division
 import numpy as np
+import math
 
 def precision_recall(Wtrue, D):
   """ Compute the precision and recall
@@ -20,6 +21,7 @@ def precision_recall(Wtrue, D):
     D    : Matrix (n_test x n_train). Each element is the distance value
   Returns:
     precision and recall, both are array, with the same dimensions.
+    mAP (mean average precision)
   """
   max_distance = np.amax(D)
   n_test, n_train = Wtrue.shape
@@ -27,8 +29,8 @@ def precision_recall(Wtrue, D):
   # calculated with Euclidean distance
   tp_fn = np.sum(Wtrue)
 
-  precision = np.zeros(max_distance)
-  recall = np.zeros(max_distance)
+  precision = np.zeros(int(max_distance))
+  recall = np.zeros(int(max_distance))
 
   for n in xrange(int(max_distance)):
     # The element in matrix j with `True` value means its the retrieved data
@@ -40,4 +42,10 @@ def precision_recall(Wtrue, D):
     precision[n] = tp / tp_fp
     recall[n] = tp / tp_fn
 
-  return precision, recall
+  st = 0
+  while st < n and math.isnan(precision[st]):
+    st += 1
+  mAP = recall[st] * precision[st]
+  for i in xrange(st + 1, n):
+    mAP += (recall[i] - recall[i - 1]) * precision[i]
+  return precision, recall, mAP
