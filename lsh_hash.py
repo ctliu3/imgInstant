@@ -22,7 +22,7 @@ def lsh_hash(x_train, XX, nbits, manhattan_hash = False, manhattan_bit = 2):
     nbits = int(ceil(nbits / manhattan_bit))
 
   Y = np.dot(XX, np.random.randn(dim, nbits))
-  print "Shape (training set) after lsh: ", Y.shape
+  #print "Shape (training set) after lsh: ", Y.shape
   # Y has the size (#test x #nbits)
   if manhattan_hash == True:
     Y = manhattan_quant(Y, n_train, nbits, manhattan_bit)

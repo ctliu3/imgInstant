@@ -12,17 +12,27 @@ from metrics import *
 from precision_recall import *
 
 if __name__ == '__main__':
-  db             = 'data/tinyImage/' # database
+  db             = 'data/LabelMe/' # database
   f_feats        = 'feats' # the feature file
   f_train        = 'train' # the training set file
   f_test         = 'test'  # the testing set file
-  nbits          = 256      # the number of bit used to present the binary code
+  nbits          = 64     # the number of bit used to present the binary code
                            # the value is better choosing in {32, 64, 128, 256}
   ntest          = 1000    # testing scale
-  method         = 'lsh'   # ['pca', 'lsh', 'itq']
+  method         = 'pca'   # ['pca', 'lsh', 'itq']
   aver_neighbors = 50      # the number of neighbors to obtain the ground true
   manhattan_hash = True   # whether to use the manhattan hashing
   manhattan_bit  = 2       # map each dimension to `manhattan_bit` bits
+
+  print 'Parameters:'
+  print '=========='
+  print 'database          :', db
+  print 'nbits             :', nbits
+  print 'method            :', method
+  print 'use manhattan hash:', 'Yes' if manhattan_hash else 'No'
+  if manhattan_hash:
+    print 'manhattan bit     :', manhattan_bit
+  print
 
   [feats, train, test] = load_data(db, f_feats, f_train, f_test);
 
@@ -85,7 +95,8 @@ if __name__ == '__main__':
     D = hamming_distance(B2, B1)
 
   # Use D and w_true_test_train to get the precision and recall
-  precision, recall = precision_recall(w_true_test_train, D)
+  precision, recall, mAP = precision_recall(w_true_test_train, D)
+  print 'mAP: ', mAP
 
   pl.clf()
   pl.plot(recall, precision, label = 'Precision-Recall curve')

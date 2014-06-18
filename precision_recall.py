@@ -23,16 +23,17 @@ def precision_recall(Wtrue, D):
     precision and recall, both are array, with the same dimensions.
     mAP (mean average precision)
   """
-  max_distance = np.amax(D)
+  max_distance = int(np.amax(D))
   n_test, n_train = Wtrue.shape
   # The number of relevant data, which is obtained from the training set and
   # calculated with Euclidean distance
   tp_fn = np.sum(Wtrue)
 
-  precision = np.zeros(int(max_distance))
-  recall = np.zeros(int(max_distance))
+  precision = np.zeros(max_distance)
+  recall = np.zeros(max_distance)
+  mAP = 0
 
-  for n in xrange(int(max_distance)):
+  for n in xrange(max_distance):
     # The element in matrix j with `True` value means its the retrieved data
     j = (D <= n + 0.00001)
     # Both retrieved and relevant
